@@ -42,5 +42,9 @@ $VPN_USER : EAP "$VPN_PASSWORD"
 $VPN_USER : XAUTH "$VPN_PASSWORD"
 EOF
 
+if [ -f "/etc/ipsec.d/ipsec.secrets" ]; then
+	echo "Overwriting standard /etc/ipsec.secrets with /etc/ipsec.d/ipsec.secrets"
+	cp -f /etc/ipsec.d/ipsec.secrets /etc/ipsec.secrets
+fi
 
 ipsec start --nofork
