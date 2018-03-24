@@ -31,20 +31,28 @@ if [ "$VPN_PASSWORD" = "$VPN_PSK" ]; then
   echo "It is not recommended to use the same secret as password and PSK key!"
 fi
 
+sed -i "s/{HOSTNAME}/$HOSTNAME/g" /etc/ipsec.conf
+
 cat > /etc/ipsec.secrets <<EOF
 # This file holds shared secrets or RSA private keys for authentication.
 # RSA private key for this host, authenticating it to any other host
 # which knows the public part.  Suitable public keys, for ipsec.conf, DNS,
 # or configuration of other implementations, can be extracted conveniently
 # with "ipsec showhostkey".
+: RSA privatekey.pem
 : PSK "$VPN_PSK"
 $VPN_USER : EAP "$VPN_PASSWORD"
 $VPN_USER : XAUTH "$VPN_PASSWORD"
 EOF
 
 if [ -f "/etc/ipsec.d/ipsec.secrets" ]; then
-	echo "Overwriting standard /etc/ipsec.secrets with /etc/ipsec.d/ipsec.secrets"
-	cp -f /etc/ipsec.d/ipsec.secrets /etc/ipsec.secrets
+  echo "Overwriting standard /etc/ipsec.secrets with /etc/ipsec.d/ipsec.secrets"
+  cp -f /etc/ipsec.d/ipsec.secrets /etc/ipsec.secrets
+fi
+
+if [ -f "/etc/ipsec.d/ipsec.conf" ]; then
+  echo "Overwriting standard /etc/ipsec.conf with /etc/ipsec.d/ipsec.conf"
+  cp -f /etc/ipsec.d/ipsec.conf /etc/ipsec.conf
 fi
 
 ipsec start --nofork

@@ -11,6 +11,8 @@ ENV VPN_USER user
 ENV VPN_PASSWORD password
 ENV VPN_PSK password
 
+ENV HOSTNAME vpn.example.com
+
 EXPOSE 4500/udp 500/udp
 
 CMD ["/run.sh"]
