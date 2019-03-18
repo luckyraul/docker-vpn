@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 RUN apt-get -qq update && apt-get install -qqy procps strongswan iptables kmod strongswan libcharon-extra-plugins
 
